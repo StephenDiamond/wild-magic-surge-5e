@@ -30,7 +30,6 @@ class TidesOfChaos {
     });
 
     await actor.updateEmbeddedDocuments("Item", updates);
-    await actor.update({ data: { [`${tidesItemData.resourceName}`]: 1 } });
   }
 
   /**
@@ -62,13 +61,6 @@ class TidesOfChaos {
     const hasTidesOfChaosResource =
       tidesOfChaosResourceSetup === undefined ? false : true;
 
-    if (hasTidesOfChaosResource && tidesOfChaosResourceSetup) {
-      const resourceName = tidesOfChaosResourceSetup.resourceName.split(".");
-      if (resourceName.length === 3) {
-        tidesItem = actor.system.resources[resourceName[1]].label === featName;
-      }
-    }
-
     return <TidesItemData>{
       hasTidesOfChaosResource: tidesItem,
       hasTidesOfChaosFeat: hasTidesOfChaosResource,
@@ -95,15 +87,9 @@ class TidesOfChaos {
       return undefined;
     }
 
-    if (!item?.system?.consume?.target) {
-      // If not enabled or exists then return false indicating not used.
-      return undefined;
-    }
-
     return {
       usesLeft: item.system.uses.value,
-      id: item.id,
-      resourceName: item?.system?.consume?.target,
+      id: item.id
     };
   }
 }
